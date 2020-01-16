@@ -1,0 +1,3 @@
+- pip:
+    name: Flask==0.11
+    

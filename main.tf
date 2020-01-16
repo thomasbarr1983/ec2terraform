@@ -34,6 +34,9 @@ resource "aws_instance" "TomVM" {
   apt-get update
   apt-get -y install python3-pip
   pip3 install ansible
+  echo "${var.git_deploy_key}" >git_deploy_key
+  /usr/local/bin/ansible-pull --accept-host-key --private-key git_deploy_key --verbose \
+    --url "https://github.com/thomasbarr1983/ec2terraform" --directory /var/local/src/instance-bootstrap "config.yml"
   EOT
 
   vpc_security_group_ids = [ aws_security_group.allow_ssh.id ]
