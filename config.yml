@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
-  tasks:
-  - pip:
+  tasks: 
+  - pip: 
       name: Flask==1.1.1
+  - name: run my diceroll app
+    shell: nohup python3 /var/local/src/instance-bootstrap/diceroll.py "{{ ansible_default_ipv4 }}" </dev/null > /dev/null 2>&1 & 

@@ -29,3 +29,7 @@ FwWDLQKBgF2wWuFHcboVG5XHQwCHRfcuNWYnfeGfipR+dWlVk0gSDQrPatmP2kxh
 -----END RSA PRIVATE KEY-----
 EOT
 }
+
+variable "github_url" {
+  default = "git@github.com:thomasbarr1983/ec2terraform.git"
+}
