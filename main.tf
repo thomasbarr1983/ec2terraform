@@ -41,6 +41,7 @@ resource "aws_instance" "TomVM" {
   chmod 600 git_deploy_key
   /usr/local/bin/ansible-pull --accept-host-key --private-key git_deploy_key --verbose \
     --url "${var.github_url}" --directory /var/local/src/instance-bootstrap "config.yml"
+  echo "${aws_db_instance.default.endpoint}"
   EOT
 
   vpc_security_group_ids = [ aws_security_group.allow_ssh.id ]
@@ -85,11 +86,22 @@ output "instance_ip_addr" {
   value = aws_instance.TomVM.public_ip
 }
 
-
+output "endpointdb" {
+  value = aws_db_instance.default.endpoint
+}
 
 data "aws_vpc" "default" {
   default = true
 }
 
-
+resource "aws_db_instance" "default" {
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "postgres"
+  engine_version       = "11"
+  instance_class       = "db.t2.micro"
+  name                 = "mydb"
+  username             = "foo"
+  password             = "foobarbaz"
+}
 

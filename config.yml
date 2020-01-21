@@ -1,7 +1,11 @@
 ---
 - hosts: localhost
-  tasks: 
+  tasks:
+  - pip:
+      name: sqlalchemy==1.3.12
   - pip: 
       name: Flask==1.1.1
+  - pip:
+      name: flask-sqlalchemy==2.4.1    
   - name: run my diceroll app
     shell: nohup python3 /var/local/src/instance-bootstrap/diceroll.py "{{ ansible_default_ipv4.address }}" </dev/null > /dev/null 2>&1 & 
