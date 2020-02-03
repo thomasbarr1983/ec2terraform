@@ -42,6 +42,7 @@ resource "aws_instance" "TomVM" {
   /usr/local/bin/ansible-pull --accept-host-key --private-key git_deploy_key --verbose \
     --url "${var.github_url}" --directory /var/local/src/instance-bootstrap "config.yml"
   echo "${aws_db_instance.default.endpoint}"
+  
   EOT
 
   vpc_security_group_ids = [ aws_security_group.allow_ssh.id ]

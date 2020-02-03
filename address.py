@@ -5,72 +5,83 @@ from flask_restful import Api, Resource
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///address.db'
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 api = Api(app)
 
-class Post(db.Model):
+class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50))
-    content = db.Column(db.String(255))
-
+    number = db.Column(db.String(255))
+    street = db.Column(db.String(255))
+    city = db.Column(db.String(255))
+    state = db.Column(db.String(255))
+    zipcode = db.Column(db.String(255))
 
     def __repr__(self):
-        return '<Post %d,%s,%s>' % self.id,self.title,self.content
+        return '<Address %d,%s,%s>' % self.id,self.number,self.street
 
-class PostSchema(ma.Schema):
+class AddressSchema(ma.Schema):
         class Meta:
-                fields = ("id", "title", "content")
+                fields = ("id", "number", "street", "city", "state", "zipcode")
 
-post_schema = PostSchema()
-posts_schema = PostSchema(many=True)
+address_schema = AddressSchema()
+addresses_schema = AddressesSchema(many=True)
 
 
-class PostListResource(Resource):
+class AddressListResource(Resource):
     def get(self):
-        posts = Post.query.all()
-        return posts_schema.dump(posts)
+        addresses = Address.query.all()
+        return addresses_schema.dump(addresses)
 
     def post(self):
-        new_post = Post(
-                title=request.json['title'],
-                content=request.json['content']
+        new_post = Address(
+                number=request.json['number'],
+                street=request.json['street'],
+                city=request.json['city'],
+                state=request.json['state'],
+                zipcode=request.json['zipcode']
         )
         db.session.add(new_post)
         db.session.commit()
-        return post_schema.dump(new_post)
+        return address_schema.dump(new_post)
 
 
 
-api.add_resource(PostListResource, '/posts')
+api.add_resource(AddressListResource, '/addresses')
 
-class PostResource(Resource):
+class AddressResource(Resource):
     def get(self, post_id):
-        post = Post.query.get_or_404(post_id)
-        return post_schema.dump(post)
+        address = Address.query.get_or_404(address_id)
+        return address_schema.dump(address)
 
-    def patch(self, post_id):
-        post = Post.query.get_or_404(post_id)
+    def patch(self, address_id):
+        address = Address.query.get_or_404(address_id)
 
-        if 'title' in request.json:
-           post.title = request.json['title']
-        if 'content' in request.json:
-           post.content = request.json['content']
-
+        if 'number' in request.json:
+           address.number = request.json['number']
+        if 'street' in request.json:
+           address.street = request.json['street']
+        if 'city' in request.json:
+           address.city = request.json['city']
+        if 'state' in request.json:
+           address.state = request.json['state']      
+        if 'zipcode' in request.json:
+           address.zipcode = request.json['zipcode']
+              
         db.session.commit()
-        return post_schema.dump(post)
+        return address_schema.dump(address)
 
 
-    def delete(self, post_id):
-        post = Post.query.get_or_404(post_id)
-        db.session.delete(post)
+    def delete(self, address_id):
+        address = Address.query.get_or_404(address_id)
+        db.session.delete(address)
         db.session.commit()
         return '', 204
 
 
 
-api.add_resource(PostResource, '/posts/<int:post_id>')
+api.add_resource(AddressResource, '/addresses/<int:address_id>')
 
 
 if __name__ == '__main__':
