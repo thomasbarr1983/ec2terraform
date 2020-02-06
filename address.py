@@ -3,12 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_restful import Api, Resource
 
+db = SQLAlchemy()
+ma = Marshmallow()
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///address.db'
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
-api = Api(app)
 
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,6 +14,7 @@ class Address(db.Model):
     city = db.Column(db.String(255))
     state = db.Column(db.String(255))
     zipcode = db.Column(db.String(255))
+    person_id = db.Column(db.Integer,db.ForeignKey('person.id'))
 
     def __repr__(self):
         return '<Address %d,%s,%s>' % self.id,self.number,self.street
@@ -26,7 +24,7 @@ class AddressSchema(ma.Schema):
                 fields = ("id", "number", "street", "city", "state", "zipcode")
 
 address_schema = AddressSchema()
-addresses_schema = AddressesSchema(many=True)
+addresses_schema = AddressSchema(many=True)
 
 
 class AddressListResource(Resource):
@@ -48,10 +46,10 @@ class AddressListResource(Resource):
 
 
 
-api.add_resource(AddressListResource, '/addresses')
+
 
 class AddressResource(Resource):
-    def get(self, post_id):
+    def get(self, address_id):
         address = Address.query.get_or_404(address_id)
         return address_schema.dump(address)
 
@@ -81,8 +79,4 @@ class AddressResource(Resource):
 
 
 
-api.add_resource(AddressResource, '/addresses/<int:address_id>')
 
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
