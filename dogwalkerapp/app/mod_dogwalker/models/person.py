@@ -17,7 +17,10 @@ class Person(db.Model):
     # will set up to have marker for dogwalker(w) or customer(c)
     role = db.Column(db.String(1))
     addresses = db.relationship('Address', backref='person')
-    pets = db.relationship('Pet', backref='person')
+    pets = db.relationship('Pet', backref='person')#cascade="all, delete-orphan"
+    vet_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+    vet = db.relationship(lambda:Person, remote_side=id, backref="patients")
+
 
     def __repr__(self):
         return '<Person %d,%s,%s,%s>' % self.id, self.first_name, self.last_name, self.role
@@ -34,7 +37,7 @@ class PersonSchema(SQLAlchemySchema):
     role = auto_field()
     addresses = auto_field()
     pets = auto_field()
-
+    vet = auto_field()
 
 person_schema = PersonSchema()
 persons_schema = PersonSchema(many=True)
@@ -62,7 +65,8 @@ class PersonListResource(Resource):
             last_name=request.json['last_name'],
             phone_number=request.json['phone_number'],
             email=request.json['email'],
-            role=request.json['role']
+            role=request.json['role'],
+            vet=request.json['vet']
         )
         db.session.add(new_post)
         db.session.commit()
@@ -87,6 +91,8 @@ class PersonResource(Resource):
             person.state = request.json['email']
         if 'role' in request.json:
             person.zipcode = request.json['role']
+        if 'vet' in request.json:
+            person.vet = request.json['vet']
 
         db.session.commit()
         return person_schema.dump(person)

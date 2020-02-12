@@ -14,6 +14,7 @@ class Address(db.Model):
     state = db.Column(db.String(255))
     zipcode = db.Column(db.String(255))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+    
 
     def __repr__(self):
         return '<Address %d,%s,%s>' % self.id, self.number, self.street
