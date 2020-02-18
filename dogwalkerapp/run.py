@@ -6,17 +6,15 @@ from app import app, db, ma
 from app.mod_dogwalker.models.address import AddressListResource, AddressResource
 from app.mod_dogwalker.models.person import PersonListResource, PersonResource, PersonSearchResource
 from app.mod_dogwalker.models.pet import PetListResource, PetResource
-from mod_auth.models import User, Role
-
+from app.mod_auth.models import User, Role
+from database import db_session
+from flask_security import Security, SQLAlchemySessionUserDatastore, login_required, current_user
+from database import init_db
 api = Api(app)
-
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=db.engine))
-
-Base = declarative_base()
-Base.query = db_session.query_property()
-
+init_db()
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 api.add_resource(AddressListResource, '/addresses')
 api.add_resource(AddressResource, '/addresses/<int:address_id>')
@@ -27,22 +25,21 @@ api.add_resource(PetListResource, '/pets')
 api.add_resource(PetResource, '/pets/<int:pet_id>')
 
 
-user_datastore = SQLAlchemySessionUserDatastore(db_session,
-                                                User, Role)
+user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 # Create a user to test with
 @app.before_first_request
 def create_user():
-    init_db()
-    user_datastore.create_user(email='thomas.barr1983@gmail.com', password='Bassai1983!#%&')
+    
+    #user_datastore.create_user(email='thomas.barr1983@gmail.com', password='Bassai1983!#%&')
     db_session.commit()
 
 # Views
 @app.route('/')
 @login_required
 def home():
-    return render('Here you go!')
+    return ('Here you go! '+current_user.email)
 
 
 if __name__ == '__main__':

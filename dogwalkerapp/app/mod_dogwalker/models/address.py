@@ -3,18 +3,27 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
 from flask_restful import Api, Resource
-from app import db, ma
+from sqlalchemy import Column, Integer, String, ForeignKey
+from database import Base
+from sqlalchemy.orm import relationship
 
 
-class Address(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    number = db.Column(db.String(255))
-    street = db.Column(db.String(255))
-    city = db.Column(db.String(255))
-    state = db.Column(db.String(255))
-    zipcode = db.Column(db.String(255))
-    person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+class Address(Base):
+    __tablename__ = 'address'
+    id = Column(Integer, primary_key=True)
+    number = Column(String(255))
+    street = Column(String(255))
+    city = Column(String(255))
+    state = Column(String(255))
+    zipcode = Column(String(255))
+    person_id = Column(Integer, ForeignKey('person.id'))
     
+    def __init__(self, number=None, street=None, city=None, state=None, zipcode=None):
+        self.number = number
+        self.street = street
+        self.city = city
+        self.state = state
+        self.zipcode = zipcode
 
     def __repr__(self):
         return '<Address %d,%s,%s>' % self.id, self.number, self.street
@@ -50,8 +59,8 @@ class AddressListResource(Resource):
             zipcode=request.json['zipcode'],
             person_id=request.json['person_id']
         )
-        db.session.add(new_post)
-        db.session.commit()
+        session.add(new_post)
+        session.commit()
         return address_schema.dump(new_post)
 
 
@@ -76,11 +85,11 @@ class AddressResource(Resource):
         if 'person_id' in request.json:
             address.person_id = request.json['person_id']
 
-        db.session.commit()
+        session.commit()
         return address_schema.dump(address)
 
     def delete(self, address_id):
         address = Address.query.get_or_404(address_id)
-        db.session.delete(address)
-        db.session.commit()
+        session.delete(address)
+        session.commit()
         return '', 204

@@ -3,24 +3,33 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field, SQLAlchemyAutoSchema
 from flask_restful import Api, Resource
-from address import Address
-from pet import Pet
-from app import db, ma
+from app.mod_dogwalker.models.address import Address
+from .pet import Pet
+from database import Base
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 
-class Person(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(255))
-    last_name = db.Column(db.String(255))
-    phone_number = db.Column(db.String(255))
-    email = db.Column(db.String(255))
+class Person(Base):
+    __tablename__ = 'person'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
+    phone_number = Column(String(255))
+    email = Column(String(255))
     # will set up to have marker for dogwalker(w) or customer(c)
-    role = db.Column(db.String(1))
-    addresses = db.relationship('Address', backref='person')
-    pets = db.relationship('Pet', backref='person')#cascade="all, delete-orphan"
-    vet_id = db.Column(db.Integer, db.ForeignKey('person.id'))
-    vet = db.relationship(lambda:Person, remote_side=id, backref="patients")
+    role = Column(String(1))
+    addresses = relationship('Address', backref='person')
+    pets = relationship('Pet', backref='person')#cascade="all, delete-orphan"
+    vet_id = Column(Integer, ForeignKey('person.id'))
+    vet = relationship(lambda:Person, remote_side=id, backref="patients")
 
+    def __init__(self, first_name=None, last_name=None, phone_number=None, email=None, role=None, vet_id=None):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.phone_number = phone_number
+        self.vet_id = vet_id
 
     def __repr__(self):
         return '<Person %d,%s,%s,%s>' % self.id, self.first_name, self.last_name, self.role
@@ -68,8 +77,8 @@ class PersonListResource(Resource):
             role=request.json['role'],
             vet=request.json['vet']
         )
-        db.session.add(new_post)
-        db.session.commit()
+        session.add(new_post)
+        session.commit()
         return person_schema.dump(new_post)
 
 
@@ -94,13 +103,13 @@ class PersonResource(Resource):
         if 'vet' in request.json:
             person.vet = request.json['vet']
 
-        db.session.commit()
+        session.commit()
         return person_schema.dump(person)
 
     def delete(self, person_id):
         person = Person.query.get_or_404(person_id)
-        db.session.delete(person)
-        db.session.commit()
+        session.delete(person)
+        session.commit()
         return '', 204
 
 

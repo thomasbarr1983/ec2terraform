@@ -1,0 +1,5 @@
+.terraform
+__pycache__
+*.back
+*.tfstate
+*.backup

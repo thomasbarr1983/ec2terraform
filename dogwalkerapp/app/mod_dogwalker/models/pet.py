@@ -3,16 +3,25 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 from flask_restful import Api, Resource
-from app import db, ma
+from database import Base
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 
-class Pet(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(255))
-    last_name = db.Column(db.String(255))
-    age = db.Column(db.String(20))
-    breed = db.Column(db.String(255))
-    person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+class Pet(Base):
+    __tablename__ = 'pet'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
+    age = Column(String(20))
+    breed = Column(String(255))
+    person_id = Column(Integer, ForeignKey('person.id'))
+
+    def __init__(self, first_name=None, last_name=None, age=None, breed=None, person_id=None):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.age = age
+        self.breed = breed
 
 
 class PetSchema(SQLAlchemyAutoSchema):
@@ -38,8 +47,8 @@ class PetListResource(Resource):
             breed=request.json['breed'],
             person_id=request.json['person_id']
         )
-        db.session.add(new_post)
-        db.session.commit()
+        session.add(new_post)
+        session.commit()
         return pet_schema.dump(new_post)
 
 
@@ -61,11 +70,11 @@ class PetResource(Resource):
         maybe_update(self, pet, "breed")
         maybe_update(self, pet, "person_id")
 
-        db.session.commit()
+        session.commit()
         return pet_schema.dump(pet)
 
     def delete(self, pet_id):
         pet = Pet.query.get_or_404(pet_id)
-        db.session.delete(pet)
-        db.session.commit()
+        session.delete(pet)
+        session.commit()
         return '', 204
