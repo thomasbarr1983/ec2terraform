@@ -10,12 +10,16 @@ from app.mod_auth.models import User, Role
 from database import db_session
 from flask_security import Security, SQLAlchemySessionUserDatastore, login_required, current_user
 from database import init_db
+from app.mod_dogwalker.controllers import mod_dogwalker
 api = Api(app)
 init_db()
+#import app.mod_dogwalker
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
+app.register_blueprint(mod_dogwalker)
 api.add_resource(AddressListResource, '/addresses')
 api.add_resource(AddressResource, '/addresses/<int:address_id>')
 api.add_resource(PersonListResource, '/persons')
@@ -29,13 +33,17 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 # Create a user to test with
+
+
 @app.before_first_request
 def create_user():
-    
-    #user_datastore.create_user(email='thomas.barr1983@gmail.com', password='Bassai1983!#%&')
+
+    # user_datastore.create_user(email='thomas.barr1983@gmail.com', password='Bassai1983!#%&')
     db_session.commit()
 
 # Views
+
+
 @app.route('/')
 @login_required
 def home():
@@ -47,6 +55,3 @@ if __name__ == '__main__':
         db.create_all()
         db.session.commit()
     app.run(debug=True, host='0.0.0.0')
-
-
-

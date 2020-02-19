@@ -7,7 +7,7 @@ from app.mod_dogwalker.models.address import Address
 from .pet import Pet
 from database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 
 
 class Person(Base):
