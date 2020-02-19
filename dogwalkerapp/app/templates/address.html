@@ -1,0 +1,47 @@
+{% macro render_field(field, placeholder=None) %}
+{% if field.errors %}
+<div>
+{% elif field.flags.error %}
+<div>
+{% else %}
+<div>
+{% endif %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+</div>
+{% endmacro %}
+
+<div>
+  <div>
+    <legend>Register Address</legend>
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+    <div>
+    {% for error in errors %}
+    {{ error }}<br>
+    {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if form.errors %}
+    <div>
+    {% for field, error in form.errors.items() %}
+    {% for e in error %}
+    {{ e }}<br>
+    {% endfor %}
+    {% endfor %}
+    </div>
+    {% endif %}
+    <form method="POST" action="address" accept-charset="UTF-8" role="form">
+      {{ form.csrf_token }}
+      {{ render_field(form.number, placeholder="Street Number",
+                                  autofocus="") }}
+      {{ render_field(form.street, placeholder="street name") }}
+      {{ render_field(form.city, placeholder="City") }}
+      {{ render_field(form.state, placeholder="State") }}
+      {{ render_field(form.zipcode, placeholder="Zipcode") }}
+      <button type="submit" name="submit">Register Address</button>
+    </form>  
+  </div>
+</div>
