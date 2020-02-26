@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, PasswordField  # BooleanField
-
+from wtforms import TextField, PasswordField, HiddenField
 # Import Form validators
 from wtforms.validators import Required, Email, EqualTo
 
@@ -8,6 +7,7 @@ from wtforms.validators import Required, Email, EqualTo
 # Define the login form (WTForms)
 
 class PersonForm(FlaskForm):
+    id = HiddenField('id')
     first_name = TextField(
         'First Name', [Required(message='Please add your First Name')])
     last_name = TextField('Last Name', [Required(

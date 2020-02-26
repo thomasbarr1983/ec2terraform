@@ -35,6 +35,7 @@
     {% endif %}
     <form method="POST" action="person" accept-charset="UTF-8" role="form">
       {{ form.csrf_token }}
+      {{ render_field(form.id) }}
       {{ render_field(form.email, placeholder="Your Email Address",
                                   autofocus="") }}
       {{ render_field(form.first_name, placeholder="first name") }}

@@ -1,4 +1,3 @@
-# Import flask dependencies
 from flask import request, render_template, \
     flash, g, session, redirect, url_for
 from database import db_session
@@ -36,6 +35,28 @@ def create_person():
         db_session.commit()
 
     return render_template("person.html", form=form)
+
+@mod_dogwalker.route('/person/<person_id>', methods=['GET', 'POST'])
+def view_person(person_id):
+
+    person = Person.query.get(person_id)
+    form = PersonForm()
+    form.process(formdata=request.form, obj=person)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(person)
+        session.commit()
+        redirect('/person/'+person_id)
+    return render_response('person.html', form=form)
+
+    # Verify the sign in form
+    if form.validate_on_submit():
+
+        new_person = Person(first_name=form.first_name.data, last_name=form.last_name.data,
+                            phone_number=form.phone_number.data, email=form.email.data, role='C')
+        db_session.add(new_person)
+        db_session.commit()
+
+    return render_template("person.html", form=form)    
 
 
 @mod_dogwalker.route('/pet', methods=['GET', 'POST'])
