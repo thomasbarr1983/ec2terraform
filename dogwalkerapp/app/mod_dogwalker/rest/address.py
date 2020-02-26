@@ -16,6 +16,8 @@ blp = Blueprint(
     'address', 'address', url_prefix='/addresses',
     description='Operations on address'
 )
+
+
 class AddressSchema(SQLAlchemySchema):
     class Meta:
         model = Address
@@ -28,9 +30,6 @@ class AddressSchema(SQLAlchemySchema):
     zipcode = auto_field()
     person_id = auto_field()
 
-
-address_schema = AddressSchema()
-addresses_schema = AddressSchema(many=True)
 
 class AddressQueryArgsSchema(ma.Schema):
     name = ma.fields.String()
@@ -45,6 +44,7 @@ class AddressListResource(MethodView):
 
         Get list of addresses"""
         return Address.query.all()
+
     @blp.arguments(AddressSchema)
     @blp.response(AddressSchema, code=201)
     def post(self, new_data):
@@ -59,6 +59,7 @@ class AddressListResource(MethodView):
         session.add(new_post)
         session.commit()
         return new_post
+
 
 @blp.route('/<address_id>')
 class AddressResource(MethodView):

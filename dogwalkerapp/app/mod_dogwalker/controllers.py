@@ -37,6 +37,7 @@ def create_person():
 
     return render_template("person.html", form=form)
 
+
 @mod_dogwalker.route('/pet', methods=['GET', 'POST'])
 def create_pet():
 
@@ -45,11 +46,13 @@ def create_pet():
     # Verify the sign in form
     if form.validate_on_submit():
 
-        new_pet = Pet(first_name=form.first_name.data, last_name=form.last_name.data, breed=form.breed.data, age=form.age.data)
+        new_pet = Pet(first_name=form.first_name.data,
+                      last_name=form.last_name.data, breed=form.breed.data, age=form.age.data)
         db_session.add(new_pet)
         db_session.commit()
 
     return render_template("pet.html", form=form)
+
 
 @mod_dogwalker.route('/address', methods=['GET', 'POST'])
 def create_address():
@@ -59,7 +62,8 @@ def create_address():
     # Verify the sign in form
     if form.validate_on_submit():
 
-        new_address = Address(number=form.number.data, street=form.street.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data)
+        new_address = Address(number=form.number.data, street=form.street.data,
+                              city=form.city.data, state=form.state.data, zipcode=form.zipcode.data)
         db_session.add(new_address)
         db_session.commit()
 

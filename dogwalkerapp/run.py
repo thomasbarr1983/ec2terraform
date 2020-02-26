@@ -17,16 +17,16 @@ from app.mod_dogwalker.rest.address import blp as address_blp
 
 
 init_db()
-#import app.mod_dogwalker
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
+
+# Register form blueprints
 app.register_blueprint(mod_dogwalker)
-#
-#api.add_resource(PetListResource, '/pets')
-#api.add_resource(PetResource, '/pets/<int:pet_id>')
+# Register rest api bluprints
 api.register_blueprint(pet_blp)
 api.register_blueprint(person_blp)
 api.register_blueprint(address_blp)

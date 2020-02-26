@@ -1,23 +1,25 @@
-from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-import marshmallow as ma
-from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field, SQLAlchemyAutoSchema
-from flask_restful import Api, Resource
-from app.mod_dogwalker.models.address import Address
-from .pet import Pet
-from database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship, sessionmaker
-from ..models.person import Person
-from flask.views import MethodView
+from flfrom ... import api
 from flask_smorest import Api, Blueprint, abort
-from ... import api
+from flask.views import MethodView
+from ..models.person import Person
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy import Column, Integer, String, ForeignKey
+from database import Base
+from .pet import Pet
+from app.mod_dogwalker.models.address import Address
+from flask_restful import Api, Resource
+from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field, SQLAlchemyAutoSchema
+import marshmallow as ma
+from flask_marshmallow import Marshmallow
+from flask_sqlalchemy import SQLAlchemy
+ask import Flask, request
 
 blp = Blueprint(
     'persons', 'persons', url_prefix='/persons',
     description='Operations on persons'
 )
+
+
 class PersonSchema(SQLAlchemySchema):
     class Meta:
         model = Person
@@ -37,13 +39,12 @@ class PersonSchema(SQLAlchemySchema):
 class PersonQueryArgsSchema(ma.Schema):
     name = ma.fields.String()
 
+
 class PersonFullSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Person
         include_relationships = True
         load_instance = True
-
-
 
 
 @blp.route('/')
@@ -71,6 +72,7 @@ class PersonListResource(MethodView):
         session.add(new_post)
         session.commit()
         return new_post
+
 
 @blp.route('/<person_id>')
 class PersonResource(MethodView):
@@ -108,7 +110,7 @@ class PersonResource(MethodView):
         session.commit()
         return person
 
-    @blp.response(code=204)    
+    @blp.response(code=204)
     def delete(self, person_id):
         """Delete pet"""
         person = Person.query.get(person_id)
@@ -116,9 +118,11 @@ class PersonResource(MethodView):
             abort(404, message='Item not found.')
         session.delete(person)
         session.commit()
-        
+
+
 class PersonSearchArgsSchema(ma.Schema):
     name = ma.fields.String()
+
 
 class PersonSearchResource(MethodView):
     @blp.arguments(PersonSearchArgsSchema, location='query')

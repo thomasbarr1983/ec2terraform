@@ -1,9 +1,9 @@
 # Statement for enabling the development environment
+import os
 DEBUG = True
 
 # Define the application directory
-import os
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))  
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database - we are working with
 # SQLite for this example
@@ -23,10 +23,10 @@ OPENAPI_SWAGGER_UI_PATH = '/swagger'
 OPENAPI_SWAGGER_UI_VERSION = '3.18.3'
 OPENAPI_SWAGGER_UI_SUPPORTED_SUBMIT_METHODS = ['get']
 # Enable protection agains *Cross-site Request Forgery (CSRF)*
-CSRF_ENABLED     = True
+CSRF_ENABLED = True
 
 # Use a secure, unique and absolutely secret key for
-# signing the data. 
+# signing the data.
 CSRF_SESSION_KEY = "987654321987"
 
 # Secret key for signing cookies

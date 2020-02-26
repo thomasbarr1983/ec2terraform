@@ -17,8 +17,6 @@ blp = Blueprint(
     description='Operations on pets'
 )
 
-# @api.definition('Pet')
-
 
 class PetSchema(SQLAlchemyAutoSchema):
     class Meta:
@@ -61,7 +59,7 @@ class PetResource(MethodView):
     @blp.response(PetSchema)
     def get(self, pet_id):
         """Get pet by ID"""
-      
+
         pet = Pet.query.get(pet_id)
         if pet is None:
             abort(404, message='Item not found.')
@@ -75,7 +73,7 @@ class PetResource(MethodView):
     @blp.response(PetSchema)
     def patch(self, new_data, pet_id):
         """Update existing pet"""
-        
+
         pet = Pet.query.get(pet_id)
         if pet is None:
             abort(404, message='Item not found.')
@@ -88,7 +86,7 @@ class PetResource(MethodView):
 
         session.commit()
         return pet
-        
+
     @blp.response(code=204)
     def delete(self, pet_id):
         """Delete pet"""
@@ -97,4 +95,3 @@ class PetResource(MethodView):
             abort(404, message='Item not found.')
         session.delete(pet)
         session.commit()
-        
