@@ -1,8 +1,9 @@
 # Import flask dependencies
-from flask import Blueprint, request, render_template, \
+from flask import request, render_template, \
     flash, g, session, redirect, url_for
 from database import db_session
 # Import the database object from the main app module
+from flask_smorest import Api, Blueprint, abort
 from app import db
 from .models.pet import Pet
 from .models.person import Person

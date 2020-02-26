@@ -1,17 +1,21 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from flask_restful import Api, Resource
-from app import app, db, ma
-from app.mod_dogwalker.models.address import AddressListResource, AddressResource
-from app.mod_dogwalker.models.person import PersonListResource, PersonResource, PersonSearchResource
-from app.mod_dogwalker.models.pet import PetListResource, PetResource
+from app import app, db, ma, api
+from app.mod_dogwalker.rest.address import AddressListResource, AddressResource
+from app.mod_dogwalker.rest.person import PersonListResource, PersonResource, PersonSearchResource
+#from app.mod_dogwalker.rest.pet import PetListResource, PetResource
 from app.mod_auth.models import User, Role
 from database import db_session
 from flask_security import Security, SQLAlchemySessionUserDatastore, login_required, current_user
 from database import init_db
 from app.mod_dogwalker.controllers import mod_dogwalker
-api = Api(app)
+from flask_smorest import Api, Blueprint, abort
+from app.mod_dogwalker.rest.pet import blp as pet_blp
+from app.mod_dogwalker.rest.person import blp as person_blp
+from app.mod_dogwalker.rest.address import blp as address_blp
+
+
 init_db()
 #import app.mod_dogwalker
 
@@ -20,14 +24,12 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 app.register_blueprint(mod_dogwalker)
-api.add_resource(AddressListResource, '/addresses')
-api.add_resource(AddressResource, '/addresses/<int:address_id>')
-api.add_resource(PersonListResource, '/persons')
-api.add_resource(PersonResource, '/persons/<int:person_id>')
-api.add_resource(PersonSearchResource, '/persons/search/<search_term>')
-api.add_resource(PetListResource, '/pets')
-api.add_resource(PetResource, '/pets/<int:pet_id>')
-
+#
+#api.add_resource(PetListResource, '/pets')
+#api.add_resource(PetResource, '/pets/<int:pet_id>')
+api.register_blueprint(pet_blp)
+api.register_blueprint(person_blp)
+api.register_blueprint(address_blp)
 
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)

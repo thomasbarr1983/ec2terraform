@@ -8,7 +8,7 @@ from wtforms.validators import Required, Email, EqualTo
 # Define the login form (WTForms)
 
 class AddressForm(FlaskForm):
-    address = TextField('Address', [Required(message='Where do you live')])
+    #address = TextField('Address', [Required(message='Where do you live')])
     number = TextField('Street Number', [Required(
         message='Please add your Street Number')])
     street = TextField('Street Name', [Required(
