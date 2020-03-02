@@ -36,6 +36,7 @@ def create_person():
 
     return render_template("person.html", form=form)
 
+
 @mod_dogwalker.route('/person/<person_id>', methods=['GET', 'POST'])
 def view_person(person_id):
 
@@ -49,15 +50,16 @@ def view_person(person_id):
     return render_template('person.html', form=form)
 
 
-@mod_dogwalker.route('/pet', methods=['GET', 'POST'])
-def create_pet():
+@mod_dogwalker.route('/pet/<person_id>', methods=['GET', 'POST'])
+def create_pet(person_id):
 
     form = PetForm(request.form)
+    form.person_id.data = person_id
 
     # Verify the sign in form
     if form.validate_on_submit():
 
-        new_pet = Pet(first_name=form.first_name.data,
+        new_pet = Pet(person_id=form.person_id.data, first_name=form.first_name.data,
                       last_name=form.last_name.data, breed=form.breed.data, age=form.age.data)
         db_session.add(new_pet)
         db_session.commit()
@@ -65,16 +67,16 @@ def create_pet():
     return render_template("pet.html", form=form)
 
 
-@mod_dogwalker.route('/address', methods=['GET', 'POST'])
-def create_address():
+@mod_dogwalker.route('/address/<person_id>', methods=['GET', 'POST'])
+def create_address(person_id):
 
     form = AddressForm(request.form)
-
+    form.person_id.data = person_id
     # Verify the sign in form
     if form.validate_on_submit():
 
         new_address = Address(number=form.number.data, street=form.street.data,
-                              city=form.city.data, state=form.state.data, zipcode=form.zipcode.data)
+                              city=form.city.data, state=form.state.data, zipcode=form.zipcode.data, person_id=form.person_id.data)
         db_session.add(new_address)
         db_session.commit()
 

@@ -33,13 +33,14 @@
     {% endfor %}
     </div>
     {% endif %}
-    <form method="POST" action="pet" accept-charset="UTF-8" role="form">
+    <form method="POST" action="/dogwalker/pet/{{ form.person_id.data }}" accept-charset="UTF-8" role="form">
       {{ form.csrf_token }}
       {{ render_field(form.first_name, placeholder="Your Pet's Name",
                                   autofocus="") }}
       {{ render_field(form.last_name, placeholder="Pet Last Name") }}
       {{ render_field(form.age, placeholder="Pet's Age") }}
       {{ render_field(form.breed, placeholder="Breed") }}
+      {{ render_field(form.person_id) }}
       <button type="submit" name="submit">Register Pet</button>
     </form>  
   </div>

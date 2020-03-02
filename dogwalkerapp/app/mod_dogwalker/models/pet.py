@@ -22,6 +22,7 @@ class Pet(Base):
         self.last_name = last_name
         self.age = age
         self.breed = breed
+        self.person_id = person_id
 
 
 class PetSchema(SQLAlchemyAutoSchema):

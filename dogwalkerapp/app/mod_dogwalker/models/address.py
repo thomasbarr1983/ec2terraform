@@ -17,13 +17,14 @@ class Address(Base):
     state = Column(String(255))
     zipcode = Column(String(255))
     person_id = Column(Integer, ForeignKey('person.id'))
-    
-    def __init__(self, number=None, street=None, city=None, state=None, zipcode=None):
+
+    def __init__(self, number=None, street=None, city=None, state=None, zipcode=None, person_id=None):
         self.number = number
         self.street = street
         self.city = city
         self.state = state
         self.zipcode = zipcode
+        self.person_id = person_id
 
     def __repr__(self):
         return '<Address %d,%s,%s>' % self.id, self.number, self.street

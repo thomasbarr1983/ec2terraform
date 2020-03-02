@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, PasswordField  # BooleanField
+from wtforms import TextField, PasswordField, HiddenField
 
 # Import Form validators
 from wtforms.validators import Required, Email, EqualTo
@@ -8,7 +8,7 @@ from wtforms.validators import Required, Email, EqualTo
 # Define the login form (WTForms)
 
 class AddressForm(FlaskForm):
-    #address = TextField('Address', [Required(message='Where do you live')])
+    person_id = HiddenField('person_id')
     number = TextField('Street Number', [Required(
         message='Please add your Street Number')])
     street = TextField('Street Name', [Required(
