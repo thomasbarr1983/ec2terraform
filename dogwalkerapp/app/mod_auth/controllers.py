@@ -1,6 +1,6 @@
 # Import flask dependencies
 from flask import Blueprint, request, render_template, \
-                  flash, g, session, redirect, url_for
+    flash, g, session, redirect, url_for
 
 # Import password / encryption helper tools
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -18,6 +18,8 @@ from app.mod_auth.models import User
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Set the route and accepted methods
+
+
 @mod_auth.route('/signin/', methods=['GET', 'POST'])
 def signin():
 

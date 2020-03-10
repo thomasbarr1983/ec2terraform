@@ -17,7 +17,7 @@ class Address(Base):
     state = Column(String(255))
     zipcode = Column(String(255))
     person_id = Column(Integer, ForeignKey('person.id'))
-    
+
     def __init__(self, number=None, street=None, city=None, state=None, zipcode=None):
         self.number = number
         self.street = street
