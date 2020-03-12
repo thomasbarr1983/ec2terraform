@@ -2,8 +2,8 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from app import app, db, ma, api
-from app.mod_dogwalker.rest.address import AddressListResource, AddressResource
-from app.mod_dogwalker.rest.person import PersonListResource, PersonResource, PersonSearchResource
+#from app.mod_dogwalker.rest.address import AddressListResource, AddressResource
+#from app.mod_dogwalker.rest.person import PersonListResource, PersonResource, PersonSearchResource
 #from app.mod_dogwalker.rest.pet import PetListResource, PetResource
 from app.mod_auth.models import User, Role
 from database import db_session
