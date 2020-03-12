@@ -8,7 +8,7 @@ from .models.pet import Pet
 from .models.person import Person
 from .models.address import Address
 # Import module forms
-from .forms.person import PersonForm
+from .forms.person import PersonForm, PersonAndPetAndAddressForm 
 from .forms.pet import PetForm
 from .forms.address import AddressForm
 # Import module models (i.e. User)
@@ -81,3 +81,12 @@ def create_address(person_id):
         db_session.commit()
 
     return render_template("address.html", form=form)
+
+
+@mod_dogwalker.route('/personview/<person_id>', methods=['GET', 'POST'])
+def view_personandpet(person_id):
+
+    person = Person.query.get(person_id)
+    form = PersonAndPetAndAddressForm()
+    form.process(formdata=request.form, obj=person)
+    return render_template('personview.html', form=form)
