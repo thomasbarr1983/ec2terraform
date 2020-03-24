@@ -2,14 +2,17 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import marshmallow as ma
+from marshmallow_sqlalchemy.fields import Nested
 from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field, SQLAlchemyAutoSchema
 from flask_restful import Api, Resource
 from app.mod_dogwalker.models.address import Address
-from .pet import Pet
+from .pet import PetSchema
+from .address import AddressSchema
 from database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 from ..models.person import Person
+from ..models.pet import Pet
 from flask.views import MethodView
 from flask_smorest import Api, Blueprint, abort
 from ... import api
@@ -36,15 +39,23 @@ class PersonSchema(SQLAlchemySchema):
     vet = auto_field()
 
 
-class PersonQueryArgsSchema(ma.Schema):
-    name = ma.fields.String()
-
-
-class PersonFullSchema(SQLAlchemyAutoSchema):
+class PersonAndPetAndAddressSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Person
         include_relationships = True
         load_instance = True
+    pets = Nested(PetSchema, many = True, exclude = ("person_id",))    
+    addresses = Nested(AddressSchema, many = True, exclude = ("person_id",))
+
+class PersonQueryArgsSchema(ma.Schema):
+    name = ma.fields.String()
+
+
+#class PersonFullSchema(SQLAlchemyAutoSchema):
+#    class Meta:
+#        model = Person
+#        include_relationships = True
+#        load_instance = True
 
 
 @blp.route('/')
@@ -76,7 +87,7 @@ class PersonListResource(MethodView):
 
 @blp.route('/<person_id>')
 class PersonResource(MethodView):
-    @blp.response(PersonSchema)
+    @blp.response(PersonAndPetAndAddressSchema)
     def get(self, person_id):
         """Get person by ID"""
 
@@ -131,3 +142,6 @@ class PersonSearchResource(MethodView):
         results = Person.query.filter(
             Person.first_name.like('%'+args+'%')).all()
         return results
+
+
+

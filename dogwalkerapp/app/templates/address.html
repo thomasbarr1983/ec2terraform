@@ -33,14 +33,15 @@
     {% endfor %}
     </div>
     {% endif %}
-    <form method="POST" action="address" accept-charset="UTF-8" role="form">
+    <form method="POST" action="/dogwalker/address/{{ form.person_id.data }}" accept-charset="UTF-8" role="form">
       {{ form.csrf_token }}
-      {{ render_field(form.number, placeholder="Street Number",
+      {{ render_field(form.number, placeholder="House Number",
                                   autofocus="") }}
       {{ render_field(form.street, placeholder="Street Name") }}
       {{ render_field(form.city, placeholder="City") }}
       {{ render_field(form.state, placeholder="State") }}
       {{ render_field(form.zipcode, placeholder="Zipcode") }}
+      {{ render_field(form.person_id) }}
       <button type="submit" name="submit">Register Address</button>
     </form>  
   </div>

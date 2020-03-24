@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import marshmallow as ma
-from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
+from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field, SQLAlchemyAutoSchema
 from flask_restful import Api, Resource
 from sqlalchemy import Column, Integer, String, ForeignKey
 from database import Base
@@ -18,18 +18,12 @@ blp = Blueprint(
 )
 
 
-class AddressSchema(SQLAlchemySchema):
+class AddressSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Address
         include_fk = True
-    id = auto_field()
-    number = auto_field()
-    street = auto_field()
-    city = auto_field()
-    state = auto_field()
-    zipcode = auto_field()
-    person_id = auto_field()
-
+        load_instance = True
+    
 
 class AddressQueryArgsSchema(ma.Schema):
     name = ma.fields.String()

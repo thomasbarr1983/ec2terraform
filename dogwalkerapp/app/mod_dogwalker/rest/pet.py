@@ -22,6 +22,7 @@ class PetSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Pet
         include_fk = True
+        load_instance = True
 
 
 class PetQueryArgsSchema(ma.Schema):
