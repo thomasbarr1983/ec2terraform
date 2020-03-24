@@ -37,7 +37,7 @@ def create_person():
     return render_template("person.html", form=form)
 
 
-@mod_dogwalker.route('/person/<person_id>', methods=['GET', 'POST'])
+@mod_dogwalker.route('/persons/<person_id>', methods=['GET', 'POST'])
 def view_person(person_id):
 
     person = Person.query.get(person_id)
@@ -46,7 +46,7 @@ def view_person(person_id):
     if request.method == 'POST' and form.validate():
         form.populate_obj(person)
         session.commit()
-        redirect('/person/'+person_id)
+        redirect('/persons/'+person_id)
     return render_template('person.html', form=form)
 
 

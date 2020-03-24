@@ -31,4 +31,5 @@ app.register_blueprint(auth_module)
 
 # Build the database:
 # This will create the database file using SQLAlchemy
+
 db.create_all()

@@ -18,7 +18,7 @@ from flask_smorest import Api, Blueprint, abort
 from ... import api
 
 blp = Blueprint(
-    'persons', 'persons', url_prefix='/persons',
+    'persons', 'persons', url_prefix='/dogwalker/rest/persons',
     description='Operations on persons'
 )
 
