@@ -28,7 +28,3 @@ class Address(Base):
 
     def __repr__(self):
         return '<Address %d,%s,%s>' % self.id, self.number, self.street
-
-
-
-

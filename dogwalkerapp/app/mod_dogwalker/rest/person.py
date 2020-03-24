@@ -44,14 +44,15 @@ class PersonAndPetAndAddressSchema(SQLAlchemyAutoSchema):
         model = Person
         include_relationships = True
         load_instance = True
-    pets = Nested(PetSchema, many = True, exclude = ("person_id",))    
-    addresses = Nested(AddressSchema, many = True, exclude = ("person_id",))
+    pets = Nested(PetSchema, many=True, exclude=("person_id",))
+    addresses = Nested(AddressSchema, many=True, exclude=("person_id",))
+
 
 class PersonQueryArgsSchema(ma.Schema):
     name = ma.fields.String()
 
 
-#class PersonFullSchema(SQLAlchemyAutoSchema):
+# class PersonFullSchema(SQLAlchemyAutoSchema):
 #    class Meta:
 #        model = Person
 #        include_relationships = True
@@ -142,6 +143,3 @@ class PersonSearchResource(MethodView):
         results = Person.query.filter(
             Person.first_name.like('%'+args+'%')).all()
         return results
-
-
-

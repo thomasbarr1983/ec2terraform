@@ -20,9 +20,10 @@ class Person(Base):
     # will set up to have marker for dogwalker(w) or customer(c)
     role = Column(String(1))
     addresses = relationship('Address', backref='person')
-    pets = relationship('Pet', backref='person')#cascade="all, delete-orphan"
+    # cascade="all, delete-orphan"
+    pets = relationship('Pet', backref='person')
     vet_id = Column(Integer, ForeignKey('person.id'))
-    vet = relationship(lambda:Person, remote_side=id, backref="patients")
+    vet = relationship(lambda: Person, remote_side=id, backref="patients")
 
     def __init__(self, first_name=None, last_name=None, phone_number=None, email=None, role=None, vet_id=None):
         self.first_name = first_name
@@ -33,5 +34,3 @@ class Person(Base):
 
     def __repr__(self):
         return '<Person %d,%s,%s,%s>' % self.id, self.first_name, self.last_name, self.role
-
-

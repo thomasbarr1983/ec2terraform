@@ -23,5 +23,3 @@ class Pet(Base):
         self.age = age
         self.breed = breed
         self.person_id = person_id
-
-

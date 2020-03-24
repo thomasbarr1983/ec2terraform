@@ -23,7 +23,7 @@ class AddressSchema(SQLAlchemyAutoSchema):
         model = Address
         include_fk = True
         load_instance = True
-    
+
 
 class AddressQueryArgsSchema(ma.Schema):
     name = ma.fields.String()
