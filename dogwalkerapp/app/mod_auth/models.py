@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
     String, ForeignKey
-from app import db
+#from app import db
 from database import Base
 
 
