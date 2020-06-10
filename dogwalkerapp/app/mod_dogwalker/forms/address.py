@@ -5,7 +5,7 @@ from wtforms import TextField, PasswordField, HiddenField
 from wtforms.validators import Required, Email, EqualTo
 
 
-# Define the login form (WTForms)
+# Define the login/Address form (WTForms)
 
 class AddressForm(FlaskForm):
     person_id = HiddenField('person_id')

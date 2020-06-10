@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from database import Base
 from sqlalchemy.orm import relationship
 
-
+#set Address Model
 class Address(Base):
     __tablename__ = 'address'
     id = Column(Integer, primary_key=True)

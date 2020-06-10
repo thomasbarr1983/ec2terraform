@@ -6,7 +6,7 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, \
 #from app import db
 from database import Base
 
-
+#Define Models by Users, Role, Individual User
 class RolesUsers(Base):
     __tablename__ = 'roles_users'
     id = Column(Integer(), primary_key=True)

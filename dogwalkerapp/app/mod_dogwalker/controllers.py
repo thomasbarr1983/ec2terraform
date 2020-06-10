@@ -17,9 +17,9 @@ from .forms.address import AddressForm
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_dogwalker = Blueprint('dogwalker', __name__, url_prefix='/dogwalker')
 
+
+
 # Set the route and accepted methods
-
-
 @mod_dogwalker.route('/person', methods=['GET', 'POST'])
 def create_person():
 

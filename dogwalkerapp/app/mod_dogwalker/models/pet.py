@@ -7,7 +7,7 @@ from database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-
+#set Pet Model
 class Pet(Base):
     __tablename__ = 'pet'
     id = Column(Integer, primary_key=True)

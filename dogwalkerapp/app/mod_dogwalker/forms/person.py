@@ -4,8 +4,8 @@ from wtforms import TextField, PasswordField, HiddenField, FormField, FieldList
 from wtforms.validators import Required, Email, EqualTo
 from .pet import PetForm
 from .address import AddressForm
-# Define the login form (WTForms)
 
+# Define the login/Person form (WTForms)
 class PersonForm(FlaskForm):
     id = HiddenField('id')
     first_name = TextField(
@@ -17,7 +17,7 @@ class PersonForm(FlaskForm):
     email = TextField('Email Address', [Email(),
                                         Required(message='Forgot your email address?')])
 
-
+#Define Person/Pet/Address form
 class PersonAndPetAndAddressForm(FlaskForm):
     id = HiddenField('id')
     first_name = TextField(

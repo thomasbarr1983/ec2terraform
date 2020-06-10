@@ -9,7 +9,7 @@ from database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 
-
+#set person Model
 class Person(Base):
     __tablename__ = 'person'
     id = Column(Integer, primary_key=True)
