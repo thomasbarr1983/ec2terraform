@@ -4,6 +4,7 @@ from database import db_session
 # Import the database object from the main app module
 from flask_smorest import Api, Blueprint, abort
 from app import db
+#DB models for Pet, Person, Address
 from .models.pet import Pet
 from .models.person import Person
 from .models.address import Address
